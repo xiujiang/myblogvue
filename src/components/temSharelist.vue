@@ -71,6 +71,7 @@ import {ShowArticleAll,ArtClassData,initDate} from '../utils/server.js'
                 classtwoId:5,
                 keywords:'',
                 hasMore:true,
+                pageNum:0,
                 level:1,
                 shareClass:[
                     {classId:1,name:'技术分享',detshare:[
@@ -120,13 +121,12 @@ import {ShowArticleAll,ArtClassData,initDate} from '../utils/server.js'
                     }
                 }
                 //初始化 文章id为0开始
-                that.artId = initpage ? 0 : that.artId;
-                ShowArticleAll(that.artId,that.sendId,that.keywords,that.level,(result)=>{
-                    // console.log(result);
-                    if(result.code==1001){
+                ShowArticleAll(this.pageNum,(result)=>{
+                    console.log(result);
+                    if(result.code==0){
                         var msg = result.data;
-                        if(msg.length>0&&msg.length<10){
-                            that.hasMore = false
+                        if(msg.size>0&&msg.totalElements<10){
+                            that.hasMore = false;
                         }else{
                             that.hasMore = true;
                         }

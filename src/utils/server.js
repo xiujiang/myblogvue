@@ -70,22 +70,24 @@ const navMenList  = (callback) => {
 }
 
 //查询文章列表
-const ShowArticleAll = (artId,cateId,articleName,level,callback) =>{
+const ShowArticleAll = (pageNum,callback) =>{
+  let level = 1;
     if(level == 1){
-        var url = portUrl + 'nav/ActiveClassAllData?art_id='+artId+'&cate_id='+cateId+'&article_name='+articleName;
+        var url = portUrl + 'article/findAllArticle?pageNum'+pageNum;
     }else{
-        var url = portUrl + 'article/ShowArticleAll?art_id='+artId+'&cate_id='+cateId+'&article_name='+articleName;
+        var url = portUrl + 'article/ShowArticleAll';
     }
     axios.get(url).then(num => {
+      console.log("1111111111111")
             callback && callback(num.data);
     })
 }
 
 //查询文章详情
-const getArticleInfo = (artId,userId,callback) =>{
-    let url = portUrl + 'article/getArticleInfo?art_id='+artId+'&user_id='+userId;
+const getArticleInfo = (artId,callback) =>{
+    let url = portUrl + 'article/getArticleInfo?art_id='+artId;
     axios.get(url).then(num => {
-        if(num.data.code==1001){
+        if(num.data.code==0){
             callback && callback(num.data.data);
         }else{
             alert("查询失败");

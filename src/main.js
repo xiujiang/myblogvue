@@ -7,8 +7,8 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-default/index.css'
 import './assets/css/style.less'
 import store from './store'
-
-Vue.config.productionTip = false
+Vue.config.devtools = true
+// Vue.config.productionTip = false
 Vue.use(ElementUI)
 
 /* eslint-disable no-new */
