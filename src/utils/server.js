@@ -71,14 +71,14 @@ const navMenList  = (callback) => {
 
 //查询文章列表
 const ShowArticleAll = (pageNum,callback) =>{
+  console.log("123123123",pageNum)
   let level = 1;
     if(level == 1){
-        var url = portUrl + 'article/findAllArticle?pageNum'+pageNum;
+        var url = portUrl + 'article/findAllArticle?pageNum='+pageNum;
     }else{
         var url = portUrl + 'article/ShowArticleAll';
     }
     axios.get(url).then(num => {
-      console.log("1111111111111")
             callback && callback(num.data);
     })
 }
@@ -86,6 +86,7 @@ const ShowArticleAll = (pageNum,callback) =>{
 //查询文章详情
 const getArticleInfo = (artId,callback) =>{
     let url = portUrl + 'article/getArticleInfo?art_id='+artId;
+    console.log("url:",url)
     axios.get(url).then(num => {
         if(num.data.code==0){
             callback && callback(num.data.data);

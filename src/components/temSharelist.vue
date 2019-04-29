@@ -13,8 +13,8 @@
         </div>
         <el-col :span="24" class="s-item tcommonBox" v-for="(item,index) in articleList" :key="'article'+index">
             <span class="s-round-date">
-                <span class="month" v-html="showInitDate(item.create_time,'month')+'月'"></span>
-                <span class="day" v-html="showInitDate(item.create_time,'date')"></span>
+                <span class="month" v-html="showInitDate(item.createTime,'month')+'月'"></span>
+                <span class="day" v-html="showInitDate(item.createTime,'date')"></span>
             </span>
             <header>
                 <h1>
@@ -24,7 +24,7 @@
                 </h1>
                 <h2>
                     <i class="fa fa-fw fa-user"></i>发表于
-                    <i class="fa fa-fw fa-clock-o"></i><span v-html="showInitDate(item.create_time,'all')">{{showInitDate(item.create_time,'all')}}</span> •
+                    <i class="fa fa-fw fa-clock-o"></i><span v-html="showInitDate(item.createTime,'all')">{{showInitDate(item.createTime,'all')}}</span> •
                     <i class="fa fa-fw fa-eye"></i>{{item.browse_count}} 次围观 •
                     <i class="fa fa-fw fa-comments"></i>活捉 {{item.comment_count}} 条 •
                     <span class="rateBox">
@@ -105,34 +105,33 @@ import {ShowArticleAll,ArtClassData,initDate} from '../utils/server.js'
                 that.sendId = that.classtwoId?that.classtwoId:that.classId;
                 that.level = that.keywords ? 0 : that.classtwoId?0:1;
                 // console.log(that.classId);
-                ArtClassData(function(msg){
-                    // console.log(msg);
-                    that.shareClass = msg;
-                })
+                // ArtClassData(function(msg){
+                //     // console.log(msg);
+                //     that.shareClass = msg;
+                // })
                 //判断当前显示的分类名称 以及子分类
-                for(var i=0;i<that.shareClass.length;i++){
-                    if(that.classId==that.shareClass[i].class_id){
-                        that.className = that.shareClass[i].cate_name;
-                        if(that.shareClass[i].ChildsSon&&that.shareClass[i].ChildsSon.length>0){
-                            that.sonclassList = that.shareClass[i].ChildsSon;
-                        }else{
-                            that.sonclassList = '';
-                        }
-                    }
-                }
+                // for(var i=0;i<that.shareClass.length;i++){
+                //     if(that.classId==that.shareClass[i].class_id){
+                //         that.className = that.shareClass[i].cate_name;
+                //         if(that.shareClass[i].ChildsSon&&that.shareClass[i].ChildsSon.length>0){
+                //             that.sonclassList = that.shareClass[i].ChildsSon;
+                //         }else{
+                //             that.sonclassList = '';
+                //         }
+                //     }
+                // }
                 //初始化 文章id为0开始
                 ShowArticleAll(this.pageNum,(result)=>{
-                    console.log(result);
                     if(result.code==0){
-                        var msg = result.data;
-                        if(msg.size>0&&msg.totalElements<10){
+                        var msg = result.data.content;
+                        this.pageNum++
+                        if(this.pageNum>=result.data.totalPages){
                             that.hasMore = false;
                         }else{
                             that.hasMore = true;
                         }
                         that.articleList = initpage ? msg : that.articleList.concat(msg);
                         that.artId = msg[msg.length-1].id;
-                        // console.log(that.artId);
                     }else{
                         that.hasMore = false;
                         that.articleList = initpage ? [] : that.articleList;

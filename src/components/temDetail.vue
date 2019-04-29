@@ -2,8 +2,8 @@
 <template>
         <div class="detailBox tcommonBox" >
             <span class="s-round-date">
-                <span class="month" v-html="showInitDate(detailObj.create_time,'month')+'月'"></span>
-                <span class="day" v-html="showInitDate(detailObj.create_time,'date')"></span>
+                <span class="month" v-html="showInitDate(detailObj.createTime,'month')+'月'"></span>
+                <span class="day" v-html="showInitDate(detailObj.createTime,'date')"></span>
             </span>
             <header>
                 <h1>
@@ -12,7 +12,7 @@
                     </a>
                 </h1>
                 <h2>
-                    <i class="fa fa-fw fa-user"></i>发表于 <span >{{create_time}}</span> •
+                    <i class="fa fa-fw fa-user"></i>发表于 <span >{{createTime}}</span> •
                     <i class="fa fa-fw fa-eye"></i>{{detailObj.browse_count}} 次围观 •
                     <i class="fa fa-fw fa-comments"></i>活捉 {{detailObj.comment_count}} 条 •
                     <span class="rateBox">
@@ -133,10 +133,12 @@ import {getArticleInfo,getArtLikeCollect,initDate} from '../utils/server.js'
             routeChange:function(){
                 var that = this;
                 that.aid = that.$route.query.aid==undefined?1:parseInt(that.$route.query.aid);//获取传参的aid
+              console.log("aid:",that.aid)
                 //判断用户是否存在
                 if(localStorage.getItem('userInfo')){
                     that.haslogin = true;
                     that.userInfo = JSON.parse(localStorage.getItem('userInfo'));
+                    console.log("userInfo",that.userInfo)
                     that.userId = that.userInfo.userId;
                     // console.log(that.userInfo);
                 }else{
@@ -144,7 +146,7 @@ import {getArticleInfo,getArtLikeCollect,initDate} from '../utils/server.js'
                 }
                 //获取详情接口
                 getArticleInfo(that.aid,that.userId,function(msg){
-                    // console.log('文章详情',msg);
+                    console.log('文章详情',msg);
                     that.detailObj = msg;
                     that.likeCount = msg.like_count?msg.like_count:0;
                     that.collectCount = msg.collect_count?msg.collect_count:0;

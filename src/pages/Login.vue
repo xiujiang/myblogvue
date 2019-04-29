@@ -208,7 +208,7 @@ import {getRegister,UserLogin} from '../utils/server.js'
                     UserLogin(that.email,that.password,function(msg){
                         // console.log(msg);
                         if(msg.code==0){//登录成功
-                          console.log("123")
+                          console.log("msg:",msg)
                              localStorage.setItem('userInfo',JSON.stringify(msg.data));
                              localStorage.setItem('accessToken',msg.token);
                              if(localStorage.getItem('logUrl')){
