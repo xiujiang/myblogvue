@@ -2,7 +2,7 @@ import Vue from 'vue'
 import axios from 'axios'
 //公共路径
 // let portUrl = "http://www.mangoya.cn/port/";
-let portUrl = "http://localhost:8081/";
+let portUrl = "http://118.24.206.210:8080/MyBlog-1.0-SNAPSHOT/";
 
 //用户注册
 const getRegister = (username,password,email,callback) =>{
