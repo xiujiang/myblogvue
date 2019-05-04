@@ -210,6 +210,7 @@ import {getRegister,UserLogin} from '../utils/server.js'
                         if(msg.code==0){//登录成功
                           console.log("msg:",msg)
                              localStorage.setItem('userInfo',JSON.stringify(msg.data));
+                          localStorage.setItem("userId",msg.data.id)
                              localStorage.setItem('accessToken',msg.token);
                              if(localStorage.getItem('logUrl')){
                                  that.$router.push({path:localStorage.getItem('logUrl')});

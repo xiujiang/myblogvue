@@ -418,9 +418,9 @@ const Typeit = (isAimee,emId) =>{
                 });
 
         theater
-                .write("Luke:Hello!",1000)
+                .write(":Hello!",1000)
 //                .write("Vader:I am your father.", toggleClass)
-                .write("Luke:Hi,"+world, 500)
+                .write(":Hi,"+world, 500)
                 .write({ name: "call", args: [kill, true] })
                 .write(function () { theater.play(true); });
         function kill () {

@@ -6,63 +6,26 @@
                 <span class="day" v-html="showInitDate(detailObj.createTime,'date')"></span>
             </span>
             <header>
-                <h1>
-                    <a :href="'#/DetailShare?aid='+detailObj.id" target="_blank">
-                        {{detailObj.title}}
-                    </a>
-                </h1>
+                  <h1>
+                    {{detailObj.title}}
+                  </h1>
                 <h2>
-                    <i class="fa fa-fw fa-user"></i>发表于 <span >{{createTime}}</span> •
-                    <i class="fa fa-fw fa-eye"></i>{{detailObj.browse_count}} 次围观 •
-                    <i class="fa fa-fw fa-comments"></i>活捉 {{detailObj.comment_count}} 条 •
-                    <span class="rateBox">
-                        <i class="fa fa-fw fa-heart"></i>{{likeCount}}点赞
-                        <i class="fa fa-fw fa-star"></i>{{collectCount}}收藏
-                    </span>
+                    <i class="fa fa-fw fa-user"></i>发表于 <span >{{detailObj.createTime}}</span>
                 </h2>
-                <div class="ui label">
-                    <a :href="'#/Share?classId='+detailObj.class_id">{{detailObj.cate_name}}</a>
-                </div>
             </header>
             <div class="article-content" v-html="detailObj.content"></div>
-            <div class="dshareBox bdsharebuttonbox"  data-tag="share_1">
-                分享到:
-                <a href="javascript:void(0);" class="ds-weibo fa fa-fw fa-weibo" data-cmd="tsina" ></a>
-                <a href="javascript:void(0);" class="ds-qq fa fa-fw fa-qq" data-cmd="tqq"></a>
-                <a href="javascript:void(0);" class="ds-wechat fa fa-fw fa-wechat" data-cmd="weixin"></a>
-                <div class="dlikeColBox">
-                    <div class="dlikeBox" @click="likecollectHandle(1)" >
-                        <i :class="likeArt?'fa fa-fw fa-heart':'fa fa-fw fa-heart-o'" ></i>喜欢 | {{likeCount}}
-                    </div>
-                    <div class="dcollectBox" @click="likecollectHandle(2)" >
-                        <i :class="collectArt?'fa fa-fw fa-star':'fa fa-fw fa-star-o'" ></i>收藏 | {{collectCount}}
-                    </div>
-                </div>
+          <div>
+            <div class="donate-word">
+              <span><a :href="'#/addArticle?aid='+this.aid">编辑</a></span>
             </div>
-            <div class="donate">
-                <div class="donate-word">
-                    <span @click="pdonate=!pdonate">赞赏</span>
-                </div>
-                <el-row :class="pdonate?'donate-body':'donate-body donate-body-show'" :gutter="30">
-                    <el-col  :span="12"   class="donate-item">
-                        <div class="donate-tip">
-                            <img :src="detailObj.wechat_image?detailObj.wechat_image: 'static/img/tou.jpg'" :onerror="$store.state.errorImg"/>
-                            <span>微信扫一扫，向我赞赏</span>
-                        </div>
-                    </el-col>
-                    <el-col :span="12"  class="donate-item">
-                        <div class="donate-tip">
-                            <img :src="detailObj.alipay_image?detailObj.alipay_image:'static/img/tou.jpg'" :onerror="$store.state.errorImg"/>
-                            <span>支付宝扫一扫，向我赞赏</span>
-                        </div>
-                    </el-col>
-                </el-row>
-            </div>
+          </div>
+
         </div>
 </template>
 
 <script>
-import {getArticleInfo,getArtLikeCollect,initDate} from '../utils/server.js'
+import {getArticleInfo,initDate} from '../utils/server.js'
+import editArticle from '../components/editorArticle'
     export default {
         data() { //选项 / 数据
             return {
@@ -83,53 +46,6 @@ import {getArticleInfo,getArtLikeCollect,initDate} from '../utils/server.js'
                 // console.log(detailObj.create_time,date,full);
                 return initDate(date,full);
             },
-            likecollectHandle: function(islike){//用户点击喜欢0,用户点击收藏1
-                var that = this;
-                if(localStorage.getItem('userInfo')){//判断是否登录
-                    var tip = '';
-                    if(islike==1){
-                        if(!that.likeArt){
-                            that.likeCount+=1;
-                            that.likeArt = true;
-                            tip = '已点赞';
-                        }else{
-                            that.likeCount-=1;
-                            that.likeArt = false;
-                            tip = '已取消点赞'
-                        }
-
-                    }else{
-                        if(!that.collectArt){
-                            that.collectCount+=1;
-                            that.collectArt = true;
-                            tip = '已收藏';
-                        }else{
-                            that.collectCount-=1;
-                            that.collectArt = false;
-                            tip = '已取消收藏';
-                        }
-                    }
-                    getArtLikeCollect(that.userId,that.aid,islike,function(msg){
-                        // console.log('喜欢收藏成功',msg);
-                        that.$message({
-                             message: tip,
-                             type: 'success'
-                           });
-                    })
-                }else{//未登录 前去登录。
-                    that.$confirm('登录后即可点赞和收藏，是否前往登录页面?', '提示', {
-                      confirmButtonText: '确定',
-                      cancelButtonText: '取消',
-                      type: 'warning'
-                      }).then(() => {//确定，跳转至登录页面
-                          //储存当前页面路径，登录成功后跳回来
-                          localStorage.setItem('logUrl',that.$route.fullPath);
-                          that.$router.push({path:'/Login?login=1'});
-                     }).catch(() => {//取消关闭弹窗
-
-                     });
-                }
-            },
             routeChange:function(){
                 var that = this;
                 that.aid = that.$route.query.aid==undefined?1:parseInt(that.$route.query.aid);//获取传参的aid
@@ -139,19 +55,15 @@ import {getArticleInfo,getArtLikeCollect,initDate} from '../utils/server.js'
                     that.haslogin = true;
                     that.userInfo = JSON.parse(localStorage.getItem('userInfo'));
                     console.log("userInfo",that.userInfo)
-                    that.userId = that.userInfo.userId;
+                    that.userId = that.userInfo.id;
                     // console.log(that.userInfo);
                 }else{
                     that.haslogin = false;
                 }
                 //获取详情接口
-                getArticleInfo(that.aid,that.userId,function(msg){
+                getArticleInfo({articleId:that.aid,authorId:that.userId},function(msg){
                     console.log('文章详情',msg);
                     that.detailObj = msg;
-                    that.likeCount = msg.like_count?msg.like_count:0;
-                    that.collectCount = msg.collect_count?msg.collect_count:0;
-                    that.likeArt = msg.user_like_start==0?false:true;
-                    that.collectArt = msg.user_collect_start==0?false:true;
                     that.create_time = initDate(that.detailObj.create_time,'all');
                 })
             }
@@ -161,7 +73,7 @@ import {getArticleInfo,getArtLikeCollect,initDate} from '../utils/server.js'
            '$route':'routeChange'
          },
         components: { //定义组件
-
+          "editArticle" :editArticle
         },
         created() { //生命周期函数
             var that = this;
@@ -303,7 +215,6 @@ import {getArticleInfo,getArtLikeCollect,initDate} from '../utils/server.js'
 
 /*赞赏*/
 .donate-word{
-    margin:40px 0;
     text-align: center;
 }
 .donate-word span{

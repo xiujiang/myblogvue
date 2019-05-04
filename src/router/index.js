@@ -52,14 +52,6 @@ export default new Router({
 			name: 'DetailShare'
 		}, //分享详情
 		{
-			path: '/Reward',
-			component: resolve => require(['../pages/Reward.vue'], resolve),
-			meta: {
-				auth: true
-			},
-			name: 'Reward'
-		}, //赞赏
-		{
 			path: '/FriendsLink',
 			component: resolve => require(['../pages/FriendsLink.vue'], resolve),
 			meta: {
@@ -83,6 +75,14 @@ export default new Router({
 			},
 			name: 'Aboutme'
 		}, //关于
+    {
+      path: '/addArticle',
+      component: resolve => require(['../pages/addArticle.vue'], resolve),
+      meta: {
+        auth: true
+      },
+      name: 'addArticle'
+    }, //新增帖子
 		{
 			path: '/Login',
 			component: resolve => require(['../pages/Login.vue'], resolve),

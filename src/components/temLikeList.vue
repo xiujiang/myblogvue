@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import {ShowArticleAll,initDate,getLikeCollectList,getArtLikeCollect} from '../utils/server.js'
+import {ShowArticleAll,initDate} from '../utils/server.js'
     export default {
         data() { //选项 / 数据
             return {

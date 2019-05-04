@@ -5,11 +5,6 @@
             <div class="ui label" >
                 <a  :href="'#/Share?classId='+classId">{{className}}</a>
             </div>
-            <ul v-if="sonclassList" class="shareclassTwo" >
-                <li v-for="(citem,index) in sonclassList">
-                    <a :href="'#/Share?classId='+classId+'&classtwoId='+citem.class_id" :class="citem.class_id==classtwoId?'active':''">{{citem.cate_name}}</a>
-                </li>
-            </ul>
         </div>
         <el-col :span="24" class="s-item tcommonBox" v-for="(item,index) in articleList" :key="'article'+index">
             <span class="s-round-date">
@@ -24,17 +19,8 @@
                 </h1>
                 <h2>
                     <i class="fa fa-fw fa-user"></i>发表于
-                    <i class="fa fa-fw fa-clock-o"></i><span v-html="showInitDate(item.createTime,'all')">{{showInitDate(item.createTime,'all')}}</span> •
-                    <i class="fa fa-fw fa-eye"></i>{{item.browse_count}} 次围观 •
-                    <i class="fa fa-fw fa-comments"></i>活捉 {{item.comment_count}} 条 •
-                    <span class="rateBox">
-                        <i class="fa fa-fw fa-heart"></i>{{item.like_count?item.like_count:0}}点赞 •
-                        <i class="fa fa-fw fa-star"></i>{{item.collect_count?item.collect_count:0}}收藏
-                    </span>
+                    <i class="fa fa-fw fa-clock-o"></i><span v-html="showInitDate(item.createTime,'all')">{{showInitDate(item.createTime,'all')}}</span>
                 </h2>
-                <div class="ui label">
-                    <a :href="'#/Share?classId='+item.class_id">{{item.cate_name}}</a>
-                </div>
             </header>
             <div class="article-content">
                 <p style="text-indent:2em;">
@@ -105,10 +91,10 @@ import {ShowArticleAll,ArtClassData,initDate} from '../utils/server.js'
                 that.sendId = that.classtwoId?that.classtwoId:that.classId;
                 that.level = that.keywords ? 0 : that.classtwoId?0:1;
                 // console.log(that.classId);
-                // ArtClassData(function(msg){
-                //     // console.log(msg);
-                //     that.shareClass = msg;
-                // })
+                ArtClassData(function(msg){
+                    // console.log(msg);
+                    that.shareClass = msg;
+                })
                 //判断当前显示的分类名称 以及子分类
                 // for(var i=0;i<that.shareClass.length;i++){
                 //     if(that.classId==that.shareClass[i].class_id){
@@ -121,7 +107,7 @@ import {ShowArticleAll,ArtClassData,initDate} from '../utils/server.js'
                 //     }
                 // }
                 //初始化 文章id为0开始
-                ShowArticleAll(this.pageNum,(result)=>{
+                ShowArticleAll({pageNum:this.pageNum,authorId:localStorage.getItem('userId'),categoryId:this.classId},(result)=>{
                     if(result.code==0){
                         var msg = result.data.content;
                         this.pageNum++
@@ -142,7 +128,7 @@ import {ShowArticleAll,ArtClassData,initDate} from '../utils/server.js'
                 this.showSearchShowList(false);
             },
             routeChange:function(){
-                var that = this;
+              this.pageNum = 0
                 this.showSearchShowList(true);
             }
         },

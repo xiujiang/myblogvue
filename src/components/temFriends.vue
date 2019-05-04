@@ -15,7 +15,6 @@
 </template>
 
 <script>
-import {FriendUrlData} from '../utils/server.js'
 export default {
     data() { //选项 / 数据
         return {
@@ -30,10 +29,6 @@ export default {
     },
     created() { //生命周期函数
         var that = this;
-        FriendUrlData(function(msg){
-            // console.log(msg);
-            that.friendslink = msg;
-        })
     }
 }
 </script>

@@ -94,7 +94,7 @@
 </template>
 
 <script>
-    import {ArticleComment,OtherComment,setArticleComment,setOuthComment} from '../utils/server.js'
+    import {setArticleComment,setOuthComment} from '../utils/server.js'
     export default {
         data() { //选项 / 数据
             return {
@@ -309,9 +309,7 @@
               }
               if(that.$route.name=='DetailShare'){//文章列表的评论
                   that.leaveId = 0;
-                  ArticleComment(that.aid,that.pageId,function(result){//查询列表
-                        setData(result);
-                  })
+
               }else{//其他评论
                   if(that.$route.name == 'Reward'){//（1：赞赏 2：友情链接 3：留言板 4：关于我）
                       that.leaveId = 1
@@ -322,9 +320,7 @@
                   }else if(that.$route.name == 'Aboutme'){
                       that.leaveId = 4
                   }
-                  OtherComment(that.leaveId,that.pageId,function(result){
-                      setData(result);
-                  })
+
 
               }
           },

@@ -10,7 +10,7 @@
 						<el-menu-item index="/Home"><i class="fa fa-wa fa-home"></i> 首页</el-menu-item>
 						<el-submenu index="/Share">
 							<template slot="title"><i class="fa fa-wa fa-archive"></i> 分类</template>
-							<el-menu-item v-for="(item,index) in classListObj" :key="'class1'+index" :index="'/Share?classId='+item.class_id">{{item.cate_name}}</el-menu-item>
+							<el-menu-item v-for="(item,index) in classListObj" :key="'class1'+index" :index="'/Share?classId='+item.id">{{item.name}}</el-menu-item>
 						</el-submenu>
 						<el-submenu index="/Aboutme">
 							<template slot="title"><i class="fa fa-wa fa-flask"></i> 实验室</template>
@@ -20,6 +20,7 @@
 						<el-menu-item index="/Friendslink"><i class="fa fa-wa fa-users"></i> 伙伴</el-menu-item>
 						<el-menu-item index="/Message"><i class="fa fa-wa fa-pencil"></i> 留言板</el-menu-item>
 						<el-menu-item index="/Aboutme"><i class="fa fa-wa fa-vcard"></i> 关于</el-menu-item>
+            <el-menu-item index="/addArticle"><i class="fa fa-wa fa-vcard"></i> 新增</el-menu-item>
 						<div index="" class="pcsearchbox">
 							<i class="el-icon-search pcsearchicon"></i>
 							<div class="pcsearchinput" :class="input?'hasSearched':''">
@@ -51,58 +52,12 @@
 						</div>
 					</el-menu>
 				</div>
-				<!-- 移动端导航 -->
-				<div class="mobileBox">
-					<div class="hideMenu">
-						<i @click="pMenu=!pMenu" class="el-icon-menu"></i>
-						<el-collapse-transition>
-							<el-menu :default-active="activeIndex" class="mlistmenu" v-show="!pMenu" theme="dark" @open="handleOpen" @close="handleClose" :unique-opened="true" :router="true">
-								<el-menu-item index="/Home"><i class="fa fa-wa fa-home"></i> 首页</el-menu-item>
-								<el-submenu index="/Share">
-									<template slot="title"><i class="fa fa-wa fa-archive"></i> 分类</template>
-									<el-menu-item v-for="(item,index) in classListObj" :key="'class1'+index" :index="'/Share?classId='+item.class_id">{{item.cate_name}}</el-menu-item>
-								</el-submenu>
-								<el-submenu index="2">
-									<template slot="title"><i class="fa fa-wa fa-flask"></i> 实验室</template>
-									<el-menu-item v-for="(item,index) in projectList" :key="'class2'+index" index=""><a :href="item.nav_url" target="_blank">{{item.nav_name}}</a></el-menu-item>
-								</el-submenu>
-								<el-menu-item index="/Reward"><i class="fa fa-wa fa-cny"></i> 赞赏</el-menu-item>
-								<el-menu-item index="/Friendslink"><i class="fa fa-wa fa-users"></i> 伙伴</el-menu-item>
-								<el-menu-item index="/Message"><i class="fa fa-wa fa-pencil"></i> 留言板</el-menu-item>
-								<el-menu-item index="/Aboutme"><i class="fa fa-wa fa-vcard"></i> 关于</el-menu-item>
-								<el-menu-item v-show="!haslogin" index="" @click="logoinFun(1)">登录</el-menu-item>
-								<el-menu-item v-show="!haslogin" index="" @click="logoinFun(0)">注册</el-menu-item>
-								<el-submenu v-show="haslogin" index="3">
-									<template slot="title"><i class="fa fa-wa fa-user-circle-o"></i> 我的</template>
-									<el-menu-item index="/UserInfo">个人中心</el-menu-item>
-									<el-menu-item index="/LikeCollect?like=1">喜欢的文章</el-menu-item>
-									<el-menu-item index="/LikeCollect?like=2">收藏的文章</el-menu-item>
-									<el-menu-item index="" @click="userlogout">退出登录</el-menu-item>
-								</el-submenu>
-							</el-menu>
-						</el-collapse-transition>
-						<div class="searchBox">
-							<el-input placeholder="" icon="search" v-model="input" @keyup.enter.native="searchEnterFun" :on-icon-click="searchEnterFun" @change="searchChangeFun">
-							</el-input>
-						</div>
-					</div>
-				</div>
 			</el-col>
 		</el-row>
 	</div>
 	<div class="headImgBox" :style="{backgroundImage:this.$store.state.themeObj.top_image?'url('+this.$store.state.themeObj.top_image+')':'url(static/img/headbg05.jpg)'}">
 		<div class="scene">
-			<div><span id="luke"></span></div>
-		</div>
-		<div class="h-information">
-			<a href="#/Aboutme">
-                    <img :src="this.$store.state.themeObj.head_portrait?this.$store.state.themeObj.head_portrait:'static/img/tou.png'" alt="">
-                </a>
-			<h2 class="h-description">
-                    <a href="#/Aboutme">
-                        {{this.$store.state.themeObj.autograph?this.$store.state.themeObj.autograph:"Write the Code. Change the World."}}
-                    </a>
-                </h2>
+			<div><span id=""></span></div>
 		</div>
 	</div>
 </div>
@@ -111,9 +66,6 @@
 import {
 	ArtClassData,
 	LoginOut,
-	navMenList,
-	changeTheme,
-	AboutMeData
 } from '../utils/server.js'
 import {
 	Typeit
@@ -221,13 +173,9 @@ export default {
 				that.haslogin = false;
 			}
 			ArtClassData(function(msg) { //文章分类
-				// console.log(msg);
+				 console.log(msg);
 				that.classListObj = msg;
 			})
-			navMenList(function(msg) { //实验室项目列表获取
-				// console.log('实验室',msg);
-				that.projectList = msg;
-			});
 			if ((this.$route.name == "Share" || this.$route.name == "Home") && this.$store.state.keywords) {
 				this.input = this.$store.state.keywords;
 			} else {
@@ -269,20 +217,10 @@ export default {
 		// console.log();
 		this.routeChange();
 		//设置主题
-		changeTheme(function(msg) {
-			// console.log(msg);
-			that.$store.state.themeObj = msg;
-
-			// console.log('主题',that.$store.state.themeObj );
-		});
 		//关于我的信息
-		AboutMeData(function(msg) {
-			// console.log('关于我',msg);
-			that.$store.state.aboutmeObj = msg
-		})
+
 	},
 	mounted() { //页面元素加载完成
-		// console.log('是否是慧慧',this.$store.state.themeObj.user_start);
 		var that = this;
 		var timer = setTimeout(function() {
 			Typeit(that.$store.state.themeObj.user_start, "#luke"); //打字机效果
