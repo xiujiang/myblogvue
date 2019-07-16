@@ -1,55 +1,63 @@
 <!-- 右侧固定导航栏 -->
 <template>
     <div class="rightlistBox">
-        <div style="margin-bottom: 10px">
-          <i-button type="info" @click="toAdd">我要发文章哟</i-button>
-        </div>
-        <section >
-            <div class="r1-head">
-                <img :src="this.$store.state.themeObj.center_smailimg?this.$store.state.themeObj.center_smailimg:'static/img/headtou02.jpg'" alt="">
-                <h1 v-if="this.$store.state.themeObj.user_start!=0">
-                    <span>女王</span>Aimee
-                </h1>
+        <section>
+          <div class="tmsg-comments"  ref="listDom">
+            <a href="#" class="tmsg-comments-tip">活捉评论 {{commentList?commentList.length:0}} 条</a>
+            <div class="tmsg-commentshow">
+              <ul class="tmsg-commentlist">
+                <li class="tmsg-c-item" v-for="(item,index) in commentList" :key="'common'+index">
+                  <article class="">
+                    <header>
+                      <img  :src="item.avatar"  :onerror="$store.state.errorImg">
+                      <div class="i-name">
+                        {{item.username}}
+                      </div>
+                      <div class="i-class">
+                        {{item.label}}
+                      </div>
+                      <div class="i-time">
+                        <time>{{item.time}}</time>
+                      </div>
+                    </header>
+                    <section>
+                      <p v-html="analyzeEmoji(item.content)">{{analyzeEmoji(item.content)}}</p>
+                      <div v-if="haslogin" class="tmsg-replay" @click="respondMsg(item.comment_id,item.comment_id)">
+                        回复
+                      </div>
+                    </section>
+                  </article>
+                  <ul v-show="item.ChildsSon" class="tmsg-commentlist" style="padding-left:60px;">
+                    <li class="tmsg-c-item" v-for="(citem,cindex) in item.ChildsSon" :key="'citem'+cindex">
+                      <article class="">
+                        <header>
+                          <img :src="citem.avatar"  :onerror="$store.state.errorImg">
+                          <div class="i-name">
+                            {{citem.username}} <span>回复</span> {{citem.reply_name}}
+                          </div>
+                          <div class="i-class">
+                            {{citem.label}}
+                          </div>
+                          <div class="i-time">
+                            <time>{{citem.time}}</time>
+                          </div>
+                        </header>
+                        <section>
+                          <p v-html="analyzeEmoji(citem.content)">{{citem.content}}</p>
+                          <div v-show="haslogin" class="tmsg-replay" @click="respondMsg(citem.comment_id,item.comment_id)">
+                            回复
+                          </div>
+                        </section>
+                      </article>
+                    </li>
+                  </ul>
+                </li>
+
+              </ul>
+              <h1 v-show='hasMore' class="tcolors-bg" @click="addMoreFun" >查看更多</h1>
+              <h1 v-show='!hasMore' class="tcolors-bg" >没有更多</h1>
             </div>
-            <div class="r1-body">
-                <p>你能抓到我么？</p>
-                <div class="catch-me" >
-                    <div class="">
-                        <el-tooltip  class="item"  content="Github" placement="top" >
-                            <a  :href="catchMeObj[isAimee].git" target="_blank" ><i class="fa fa-fw fa-github"></i></a>
-                        </el-tooltip>
-                        <el-tooltip class="item" effect="dark" content="QQ" placement="top">
-                            <a  :href="catchMeObj[isAimee].qq" target="_blank"><i class="fa fa-fw fa-qq"></i></a>
-                        </el-tooltip>
-                        <el-tooltip class="item" effect="dark" content="微博" placement="top">
-                            <a :href="catchMeObj[isAimee].sina" target="_blank"><i class="fa fa-fw fa-weibo"></i></a>
-                        </el-tooltip>
-                    </div>
-                    <div class="">
-                        <el-tooltip class="item" effect="dark" content="微信" placement="top">
-                            <a :href="catchMeObj[isAimee].wechat" target="_blank"><i class="fa fa-fw fa-wechat"></i></a>
-                        </el-tooltip>
-                        <el-tooltip class="item" effect="dark" content="CSDN" placement="top">
-                            <a :href="catchMeObj[isAimee].csdn" target="_blank"><i class="">C</i></a>
-                        </el-tooltip>
-                        <el-tooltip class="item" effect="dark" content="简历" placement="top">
-                            <a :href="catchMeObj[isAimee].job" target="_blank"><i class="fa fa-fw fa-file-word-o"></i></a>
-                        </el-tooltip>
-                        <el-tooltip class="item" effect="dark" content="更多" placement="top">
-                            <a href="#/Aboutme" ><i class="el-icon-more"></i></a>
-                        </el-tooltip>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <section :class="fixDo?'rs2 fixed':'rs2'" @click="lovemeFun">
-            <p>
-                Do you like me?
-            </p>
-            <div class="">
-                <i :class="loveme?'heart active':'heart'" ></i>
-                <span>{{likeNum}}</span>
-            </div>
+          </div>
         </section>
         <!-- 右侧上滑小图片 -->
         <div  v-if="this.$store.state.themeObj.user_start!=0" :class="gotoTop?'toTop hidden':'toTop goTop hidden'" @click="toTopfun">
@@ -125,9 +133,6 @@
                       };
                 },30);
             },
-           toAdd:function(){
-            this.$router.push('/addArticle');
-          }
         },
         components: { //定义组件
 
@@ -391,5 +396,76 @@
 }
 .goTophui{
     bottom:120vh;
+}
+/*评论列表*/
+.tmsg-comments .tmsg-comments-tip{
+  display: block;
+  border-left: 2px solid #363d4c;
+  padding: 0 10px;
+  margin: 40px 0;
+  font-size: 20px;
+}
+.tmsg-commentlist {
+  margin-bottom:20px;
+
+}
+.tmsg-commentshow>.tmsg-commentlist{
+  border-bottom: 1px solid #e5eaed;
+}
+.tmsg-c-item{
+  border-top: 1px solid #e5eaed;
+}
+.tmsg-c-item article{
+  margin:20px 0;
+}
+.tmsg-c-item article header{
+  margin-bottom:10px;
+}
+.tmsg-c-item article header img{
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  float: left;
+  transition: all .4s ease-in-out;
+  -webkit-transition: all .4s ease-in-out;
+  margin-right: 15px;
+  object-fit: cover;
+}
+.tmsg-c-item article header img:hover{
+  transform: rotate(360deg);
+  -webkit-transform: rotate(360deg);
+}
+.tmsg-c-item article header .i-name{
+  font-size: 14px;
+  margin:5px 8px 7px 0;
+  color:#444;
+  font-weight: bold;
+  display: inline-block;
+}
+.tmsg-c-item article header .i-class{
+  display: inline-block;
+  margin-left:10px;
+  background: #dff0d8;
+  color:#3c763d;
+  border-radius: 5px;
+  padding: 3px 6px;
+  font-size: 12px;
+  font-weight: 400;
+}
+.tmsg-c-item article header .i-time{
+  color:#aaa;
+  font-size: 12px;
+}
+.tmsg-c-item article section{
+  margin-left: 80px;
+}
+.tmsg-c-item article section p img{
+  vertical-align: middle;
+}
+.tmsg-c-item article section .tmsg-replay{
+  margin:10px 0;
+  font-size: 12px;
+  color:#64609E;
+  cursor: pointer;
 }
 </style>

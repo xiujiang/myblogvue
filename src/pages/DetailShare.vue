@@ -9,7 +9,7 @@
                     <wbc-message></wbc-message>
                 </el-col>
                 <el-col :sm="24"  :md="8" >
-                    <wbc-rightlist></wbc-rightlist>
+                    <!--<wbc-comment></wbc-comment>-->
                 </el-col>
             </el-row>
         </div>
@@ -23,6 +23,7 @@ import footer from '../components/footer.vue'
 import temRightlist from '../components/temRightlist.vue'
 import temDetail from '../components/temDetail.vue'
 import temMessage from '../components/temMessage.vue'
+import rightComment from '../components/rightComment.vue'
     export default {
         name:'DetailShare',
         data() { //选项 / 数据
@@ -38,7 +39,8 @@ import temMessage from '../components/temMessage.vue'
             'wbc-detail':temDetail,
             'wbc-message':temMessage,
             'wbc-rightlist':temRightlist,
-            'wbc-footer':footer
+            'wbc-footer':footer,
+            'wbc-comment':rightComment
         },
         created() { //生命周期函数
 

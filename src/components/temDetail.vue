@@ -2,18 +2,19 @@
 <template>
         <div class="detailBox tcommonBox" >
             <span class="s-round-date">
-                <span class="month" v-html="showInitDate(detailObj.createTime,'month')+'月'"></span>
-                <span class="day" v-html="showInitDate(detailObj.createTime,'date')"></span>
+                <span class="month" v-html="showInitDate(this.detailObj.createTime,'month')+'月'"></span>
+                <span class="day" v-html="showInitDate(this.detailObj.createTime,'date')"></span>
             </span>
             <header>
                   <h1>
                     {{detailObj.title}}
                   </h1>
                 <h2>
-                    <i class="fa fa-fw fa-user"></i>发表于 <span >{{detailObj.createTime}}</span>
+                    <i class="fa fa-fw fa-user"></i>作者 <span >{{this.detailObj.authorId}}</span>
+                    <i class="fa fa-fw fa-clock-o"></i>发表于 <span >{{showInitDate(this.detailObj.createTime,'all')}}</span>
                 </h2>
             </header>
-            <div class="article-content" v-html="detailObj.content"></div>
+            <div class="article-content content" v-html="this.detailObj.content"></div>
           <div>
             <div class="donate-word">
               <span><a :href="'#/addArticle?aid='+this.aid">编辑</a></span>
@@ -64,8 +65,9 @@ import editArticle from '../components/editorArticle'
                 getArticleInfo({articleId:that.aid,authorId:that.userId},function(msg){
                     console.log('文章详情',msg);
                     that.detailObj = msg;
-                    that.create_time = initDate(that.detailObj.create_time,'all');
+                    that.create_time = initDate(that.detailObj.createTime,'all');
                 })
+
             }
         },
         watch: {
@@ -85,7 +87,10 @@ import editArticle from '../components/editorArticle'
 </script>
 
 <style lang="less">
-
+.content{
+  width: 100%;
+  height: 500px;
+}
 .detailBox .article-content{
     font-size: 15px;
     white-space: normal;

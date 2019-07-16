@@ -17,23 +17,22 @@
                         {{item.title}}
                     </a>
                 </h1>
-                <h2>
-                    <i class="fa fa-fw fa-user"></i>发表于
-                    <i class="fa fa-fw fa-clock-o"></i><span v-html="showInitDate(item.createTime,'all')">{{showInitDate(item.createTime,'all')}}</span>
-                </h2>
+
             </header>
-            <div class="article-content">
+            <div class="article-content" style="height: 30px">
                 <p style="text-indent:2em;">
                     {{item.description}}
                 </p>
-                <p  style="max-height:300px;overflow:hidden;text-align:center;">
-                    <img :src="item.image" alt="" class="maxW">
-                </p>
             </div>
             <div class="viewdetail">
-                <a class="tcolors-bg" :href="'#/DetailShare?aid='+item.id" target="_blank">
-                    阅读全文>>
-                </a>
+               <div>
+                 <a class="tcolors-bg" style="margin-bottom: 10px" :href="'#/DetailShare?aid='+item.id" target="_blank">
+                   阅读全文>>
+                 </a>
+               </div>
+                <div>
+                  <i class="fa fa-fw fa-clock-o"></i><span v-html="showInitDate(item.createTime,'all')">{{showInitDate(item.createTime,'all')}}</span>
+                </div>
             </div>
         </el-col>
         <el-col class="viewmore">

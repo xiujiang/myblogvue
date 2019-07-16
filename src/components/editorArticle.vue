@@ -10,10 +10,14 @@
         </header>
       <div>
         <Input v-model="title" placeholder="输入文章标题" style="width: 100%;height: 30px; margin-bottom: 30px" />
-        <RadioGroup v-model="categoryName" type="button">
-          <Radio label="java" value="java"></Radio>
-          <Radio label="block" value="block"></Radio>
-        </RadioGroup>
+
+        <div style="margin-bottom: 10px">
+          <span style="font-size: 13px; font-weight: bold">类型：</span>
+          <RadioGroup v-model="categoryName" type="button"  >
+            <Radio label="java" value="java"></Radio>
+            <Radio label="block" value="block"></Radio>
+          </RadioGroup>
+        </div>
         <div ref="editor" style="text-align:left;margin-bottom:30px;"></div>
         <Button type="primary" v-on:click="saveInfo">发布内容</Button>
           </div>
@@ -31,7 +35,7 @@
               aid:(this.$route.query.aid==undefined?0:parseInt(this.$route.query.aid)),
               title:'',
               editorContent: '',
-              categoryName:'',
+              categoryName:'java',
               hasCategoryName:false,
               hasTitle:false,
               categoryId:'',
@@ -41,7 +45,8 @@
         methods: { //事件处理器
             saveInfo:function(){
               this.checkInfo()
-              AddArticle({title:this.title,content:this.editorContent,authorId:localStorage.getItem('userId'),categoryId:this.categoryId,description:this.description.substr(0,15)},(result)=>{
+              console.log(this.title)
+              AddArticle({title:this.title,content:this.editorContent,authorId:localStorage.getItem('userId'),categoryId:this.categoryId,description:this.description.substring(0,100)},(result)=>{
                 if(result.code == "00"){
                    alert("发布成功")
                   this.$router.push({path:'/Home'});
@@ -89,9 +94,11 @@
         },
       mounted() {
         var editor = new E(this.$refs.editor)
+        editor.customConfig.uploadImgServer = 'http://localhost:8082/article/article/upload'
+        editor.customConfig.uploadFileName = 'file'
         editor.customConfig.onchange = (html) => {
           this.editorContent = html
-          this.description = editor.text()
+          this.description = editor.txt.text()
         }
         editor.create()
         this.initInfo()

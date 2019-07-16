@@ -85,7 +85,7 @@ const ShowArticleAll = (info,callback) =>{
   console.log("123123123",info)
   let level = 1;
     if(level == 1){
-        var url = portUrl + 'article/findAllArticle?pageNum='+info.pageNum+'&authorId='+info.authorId+'&categoryId='+info.categoryId;
+        var url = portUrl + 'article/findAllArticle?pageNum='+info.pageNum+'&categoryId='+info.categoryId;
     }
     axios.get(url).then(num => {
     callback && callback(num.data);
@@ -106,7 +106,7 @@ const AddArticle = (info,callback) =>{
 
 //查询文章详情
 const getArticleInfo = (info,callback) =>{
-    let url = portUrl + 'article/articleInfo?articleId='+info.articleId+"&authorId="+info.authorId;
+    let url = portUrl + 'article/articleInfo?articleId='+info.articleId;
     console.log("url:",url)
     axios.get(url).then(num => {
       console.log("num:",num.data)
@@ -191,9 +191,12 @@ const initDate = (oldDate,full) => {
     var month = odate.getMonth()<9? '0' + (odate.getMonth()+1) : odate.getMonth()+1;
     var date = odate.getDate()<10? '0'+odate.getDate() : odate.getDate();
     if(full=='all'){
-        var t = oldDate.split(" ")[0];
+        // var t = oldDate.split(" ")[0];
+        console.log("oldDate........",oldDate)
+      //2019-04-30T00:32:39
         // console.log(oldDate,t.split('-')[0],t.split('-')[1],t.split('-')[2]);
-        return t.split('-')[0]+'年'+t.split('-')[1]+'月'+t.split('-')[2]+'日';
+        let arr = oldDate.split("T");
+        return arr[0]+"  "+arr[1];
     }else if(full=='year'){
         return year
     }else if(full== 'month'){
