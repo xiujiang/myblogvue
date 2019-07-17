@@ -13,25 +13,25 @@
             </span>
             <header>
                 <h1>
-                    <a :href="'#/DetailShare?aid='+item.id" target="_blank">
+                    <a :href="'#/DetailShare?aid='+item.id">
                         {{item.title}}
                     </a>
                 </h1>
 
             </header>
-            <div class="article-content" style="height: 30px">
+            <div class="article-content">
                 <p style="text-indent:2em;">
                     {{item.description}}
                 </p>
             </div>
             <div class="viewdetail">
                <div>
-                 <a class="tcolors-bg" style="margin-bottom: 10px" :href="'#/DetailShare?aid='+item.id" target="_blank">
+                 <a class="tcolors-bg" style="margin-bottom: 10px" :href="'#/DetailShare?aid='+item.id">
                    阅读全文>>
                  </a>
                </div>
                 <div>
-                  <i class="fa fa-fw fa-clock-o"></i><span v-html="showInitDate(item.createTime,'all')">{{showInitDate(item.createTime,'all')}}</span>
+                  <i class="fa fa-fw fa-clock-o" style="margin-top: 10px"></i><span v-html="showInitDate(item.createTime,'all')">{{showInitDate(item.createTime,'all')}}</span>
                 </div>
             </div>
         </el-col>
@@ -173,6 +173,14 @@ import {ShowArticleAll,ArtClassData,initDate} from '../utils/server.js'
     transition: transform 0.2s linear;
     -webkit-transition: transform 0.2s linear;
 }
+.article-content{
+  height: 40px;
+  width: 100%;
+  margin:30px;
+}
+.viewdetail{
+  margin-bottom: 10px;
+}
 .shareclassTwo li a:hover{
     transform: translate(0,-3px);
     -webkit-transform: translate(0,-3px);
@@ -182,6 +190,8 @@ import {ShowArticleAll,ArtClassData,initDate} from '../utils/server.js'
     color:#64609E;
 
 }
+
+
 /*文章列表*/
     .sharelistBox{
         transition: all 0.5s ease-out;

@@ -23,88 +23,105 @@
           </div>
     </div>
 </template>
-
 <script>
-  import {AddArticle,getArticleInfo} from "../utils/server"
+  import {saveOrUpdateArticle,getArticleInfo,ArtClassData} from "../utils/server"
   import E from 'wangeditor'
-    export default {
+  const _ = require("lodash")
+
+
+  export default {
     name:"editArticle",
-        data() { //选项 / 数据
-            return {
-              isEditInfo:this.$route.query.isEditInfo,
-              aid:(this.$route.query.aid==undefined?0:parseInt(this.$route.query.aid)),
-              title:'',
-              editorContent: '',
-              categoryName:'java',
-              hasCategoryName:false,
-              hasTitle:false,
-              categoryId:'',
-              description: ''
-            }
-        },
-        methods: { //事件处理器
-            saveInfo:function(){
-              this.checkInfo()
-              console.log(this.title)
-              AddArticle({title:this.title,content:this.editorContent,authorId:localStorage.getItem('userId'),categoryId:this.categoryId,description:this.description.substring(0,100)},(result)=>{
-                if(result.code == "00"){
-                   alert("发布成功")
-                  this.$router.push({path:'/Home'});
-                }
-              })
-            },
-          checkInfo:function () {
-             if(!this.title){
-               this.hasTitle = true
-             }else{
-               this.hasTitle = false
-             }
-             if(!this.hasCategoryName){
-               this.hasCategoryName = true
-             }else {
-               this.hasCategoryName = false
-             }
-             console.log("classList:",sessionStorage.getItem("classList"))
-             let category = JSON.parse(sessionStorage.getItem("classList"));
-            category.forEach(c=>{
-              if(c.name == this.categoryName){
-                this.categoryId = c.id
-              }
-            })
-          },
-          initInfo(){
-            if(this.aid){
-              this.userId = JSON.parse(localStorage.getItem('userId'));
-              getArticleInfo({articleId:this.aid,authorId:this.userId},function(msg){
-                console.log('文章详情',msg);
-                if(msg){
-                  console.log("msg:",msg.title)
-                  this.title=msg.title;
-                  this.editorContent = msg.content
-                  this.description = msg.description
-                }
+    data() { //选项 / 数据
+      return {
+        isEditInfo:this.$route.query.isEditInfo,
+        aid:(this.$route.query.aid==undefined?0:parseInt(this.$route.query.aid)),
+        title:'',
+        editorContent: '',
+        categoryName:'java',
+        hasCategoryName:false,
+        hasTitle:false,
+        categoryId:'',
+        description: '',
+        editor:Object
 
-              })
-            }
-          }
-
-        },
-        components: { //定义组件
-
-        },
-      mounted() {
-        var editor = new E(this.$refs.editor)
-        editor.customConfig.uploadImgServer = 'http://localhost:8082/article/article/upload'
-        editor.customConfig.uploadFileName = 'file'
-        editor.customConfig.onchange = (html) => {
-          this.editorContent = html
-          this.description = editor.txt.text()
-        }
-        editor.create()
-        this.initInfo()
       }
+    },
+    methods: { //事件处理器
+      saveInfo:function(){
+        this.checkInfo()
+        console.log(this.title)
+        let isEdit = false;
+        if(this.aid){
+            isEdit=true;
+        }
+        saveOrUpdateArticle({id: this.aid,title:this.title,content:this.editorContent,authorId:localStorage.getItem('userId'),categoryId:this.categoryId,description:this.description.substring(0,100)},(result)=>{
+          if(result.code == "00"){
+            alert("发布成功")
+            this.$router.push({path:'/Home'});
+          }
+        },isEdit)
+      },
+      checkInfo:function () {
+        if(!this.title){
+          this.hasTitle = true
+        }else{
+          this.hasTitle = false
+        }
+        if(!this.hasCategoryName){
+          this.hasCategoryName = true
+        }else {
+          this.hasCategoryName = false
+        }
+        console.log("classList:",sessionStorage.getItem("classList"))
+        let category = JSON.parse(sessionStorage.getItem("classList"));
+        category.forEach(c=>{
+          if(c.name == this.categoryName){
+            this.categoryId = c.id
+          }
+        })
+      },
+      initInfo(){
+        var that = this;
+        console.log("this.aid:",this.aid)
+        if(this.aid){
+          this.userId = JSON.parse(localStorage.getItem('userId'));
+          getArticleInfo({articleId:this.aid,authorId:this.userId},function(msg){
+            console.log('文章详情',msg);
+            that.title=msg.title
+            ArtClassData(function(listInfo) { //文章分类
+              listInfo.forEach(o=>{
+                if(o.id === msg.categoryId){
+                  that.categoryName = o.name
+                }
+              });
+            })
+            that.description = msg.description
+            that.editorContent = msg.content
+            that.editor.txt.html(that.editorContent)
+          })
+        }
+      },
+
+    },
+    components: { //定义组件
+
+    },
+    mounted(){
+      this.editor = new E(this.$refs.editor)
+      this.editor.customConfig.uploadImgServer = 'http://localhost:8082/article/article/upload'
+      this.editor.customConfig.uploadFileName = 'file'
+      this.editor.customConfig.onchange = (html) => {
+        this.editorContent = html
+        this.description = this.editor.txt.text().replace(/&nbsp;/g,"")
+        console.log("description:", this.description.replace(/&nbsp;/g,""))
+      }
+      this.initInfo()
+      this.editor.create()
+
     }
+  }
 </script>
+
 
 <style scoped>
 </style>

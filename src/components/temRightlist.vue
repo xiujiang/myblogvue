@@ -8,7 +8,6 @@
             <div class="r1-head">
                 <img :src="this.$store.state.themeObj.center_smailimg?this.$store.state.themeObj.center_smailimg:'static/img/headtou02.jpg'" alt="">
                 <h1 v-if="this.$store.state.themeObj.user_start!=0">
-                    <span>女王</span>Aimee
                 </h1>
             </div>
             <div class="r1-body">

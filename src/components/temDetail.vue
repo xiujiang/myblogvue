@@ -89,6 +89,7 @@ import editArticle from '../components/editorArticle'
 <style lang="less">
 .content{
   width: 100%;
+  margin: 15px;
   height: 500px;
 }
 .detailBox .article-content{

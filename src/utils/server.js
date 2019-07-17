@@ -93,9 +93,14 @@ const ShowArticleAll = (info,callback) =>{
 }
 
 //查询文章列表
-const AddArticle = (info,callback) =>{
-    // var url = portUrl + 'article/addArticle?&authorId='+info.authorId+'&categoryId='+info.categoryId+'&title='+info.title+'&content='+info.content+'&description='+info.description;
+const saveOrUpdateArticle = (info,callback,isEdit) =>{
+// var url = portUrl + 'article/addArticle?&authorId='+info.authorId+'&categoryId='+info.categoryId+'&title='+info.title+'&content='+info.content+'&description='+info.description;
   var url = portUrl + 'article/addArticle';
+  if(isEdit){
+    url = portUrl + 'article/updateArticle';
+  }else{
+    url = portUrl + 'article/addArticle';
+  }
   console.log(info)
   axios.post(url,info).then(num => {
     callback && callback(num.data);
@@ -221,5 +226,5 @@ export {
         getUserInfo,//用户信息查询
         UserInfoSave,//修改用户信息
         initDate,//设置时间
-  AddArticle,  //  添加帖子
+        saveOrUpdateArticle,  //  添加帖子
     }
