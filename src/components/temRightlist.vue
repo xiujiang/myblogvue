@@ -74,21 +74,9 @@
                 likeNum:0,//do you like me 点击量
                 initLikeNum:0,//初始化喜欢数量
                 catchMeObj:{//抓住我 个人信息
-                    Qinlh:{
-                        git:'https://gitee.com/qinlh',
-                        qq: 'static/img/qinlh/qq.jpg',
-                        sina: 'https://weibo.com/u/2313631533',
-                        wechat: 'static/img/qinlh/wechat.jpg',
-                        csdn: 'http://www.qinlinhui.cn',
-                        job: 'http://qinlh.mangoya.cn/MyResume/'
-                    },
                     Aimee:{
-                        git: 'https://github.com/Aimee1608',
-                        qq: 'static/img/aimee/QQ.jpg',
-                        sina: 'https://weibo.com/u/2242812941',
-                        wechat: 'static/img/aimee/erwm.jpg',
-                        csdn: 'http://blog.csdn.net/Aimee1608',
-                        job: 'http://aimee.mangoya.cn'
+                        git: 'https://github.com/xiujiang',
+
                     }
                 },
                 isAimee:this.$store.state.themeObj.user_start!=0?"Aimee":"Qinlh"//判断是哪个的博客

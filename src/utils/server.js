@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import axios, {AxiosRequestConfig} from 'axios'
+const moment = require("moment")
 // axios.defaults.headers.post['Content-Type'] = 'application/json'
 
 // axios.interceptors.request.use(
@@ -125,17 +126,17 @@ const getArticleInfo = (info,callback) =>{
 
 //
 // //查询文章评论数据
-// const ArticleComment = (artId,commentId,callback) =>{
-//     let url = portUrl + 'comment/ArticleComment?art_id='+artId+'&comment_id='+commentId;
-//     axios.get(url).then(num => {
-//             callback && callback(num.data);
-//     })
-// }
+const ArticleComment = (artId,pageNum,callback) =>{
+    let url = portUrl + 'comment/commentPage?articleId='+artId+'&pageNum='+pageNum;
+    axios.get(url).then(num => {
+            callback && callback(num.data);
+    })
+}
 
 //文章评论
-const setArticleComment = (content,user_id,article_id,leave_pid,pid,callback) =>{
-    let url = portUrl + 'comment/setArticleComment?content='+content+'&user_id='+user_id+'&article_id='+article_id+'&leave_pid='+leave_pid+'&pid='+pid;
-    axios.get(url).then(num => {
+const setArticleComment = (info,callback) =>{
+    let url = portUrl + 'comment/addComment';
+     axios.post(url,info).then(num => {
             callback && callback(num.data);
     })
 }
@@ -196,12 +197,7 @@ const initDate = (oldDate,full) => {
     var month = odate.getMonth()<9? '0' + (odate.getMonth()+1) : odate.getMonth()+1;
     var date = odate.getDate()<10? '0'+odate.getDate() : odate.getDate();
     if(full=='all'){
-        // var t = oldDate.split(" ")[0];
-        console.log("oldDate........",oldDate)
-      //2019-04-30T00:32:39
-        // console.log(oldDate,t.split('-')[0],t.split('-')[1],t.split('-')[2]);
-        let arr = oldDate.split("T");
-        return arr[0]+"  "+arr[1];
+      return moment(oldDate).format('YYYY-MM-DD HH:mm:ss')
     }else if(full=='year'){
         return year
     }else if(full== 'month'){
@@ -209,7 +205,8 @@ const initDate = (oldDate,full) => {
     }else if(full == 'date'){
         return date
     }else if(full== 'newDate'){
-        return year+'年'+month+'月'+date+'日';
+      return moment(oldDate).format("YYYY年MM月DD日")
+        // return year+'年'+month+'月'+date+'日';
     }
 }
 
@@ -227,4 +224,5 @@ export {
         UserInfoSave,//修改用户信息
         initDate,//设置时间
         saveOrUpdateArticle,  //  添加帖子
+  ArticleComment
     }

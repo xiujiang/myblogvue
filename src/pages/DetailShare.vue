@@ -2,14 +2,13 @@
 <template>
     <div>
         <wbc-nav></wbc-nav>
-        <div  class="container" id="detail">
-            <el-row  :gutter="30">
-                <el-col :sm="24" :md="16" style="transition:all .5s ease-out;margin-bottom:30px;">
+        <div  class="container"id="detail">
+            <el-row  :gutter="30" style="height: 100%;">
+                <el-col :sm="24" :md="16" style="transition:all .5s ease-out;margin-bottom:30px; height: 100%">
                     <wbc-detail></wbc-detail>
-                    <wbc-message></wbc-message>
                 </el-col>
                 <el-col :sm="24"  :md="8" >
-                    <!--<wbc-comment></wbc-comment>-->
+                  <wbc-message></wbc-message>
                 </el-col>
             </el-row>
         </div>

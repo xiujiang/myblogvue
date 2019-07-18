@@ -116,7 +116,9 @@ import {ShowArticleAll,ArtClassData,initDate} from '../utils/server.js'
                             that.hasMore = true;
                         }
                         that.articleList = initpage ? msg : that.articleList.concat(msg);
-                        that.artId = msg[msg.length-1].id;
+                        if(msg.length>0){
+                          that.artId = msg[msg.length-1].id;
+                        }
                     }else{
                         that.hasMore = false;
                         that.articleList = initpage ? [] : that.articleList;

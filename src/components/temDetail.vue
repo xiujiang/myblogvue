@@ -38,13 +38,12 @@ import editArticle from '../components/editorArticle'
                 collectCount:500,//收藏数量
                 collectArt:false,//是否收藏
                 haslogin:false,//是否已经登录
-                userId:'',//用户id
-                create_time:''
+                userId:''//用户id
             }
         },
         methods: { //事件处理器
             showInitDate:function(date,full){//年月日的编辑
-                // console.log(detailObj.create_time,date,full);
+                // console.log(detailObj.createTime,date,full);
                 return initDate(date,full);
             },
             routeChange:function(){
@@ -65,7 +64,6 @@ import editArticle from '../components/editorArticle'
                 getArticleInfo({articleId:that.aid,authorId:that.userId},function(msg){
                     console.log('文章详情',msg);
                     that.detailObj = msg;
-                    that.create_time = initDate(that.detailObj.createTime,'all');
                 })
 
             }
@@ -90,7 +88,7 @@ import editArticle from '../components/editorArticle'
 .content{
   width: 100%;
   margin: 15px;
-  height: 500px;
+  height: 100%;
 }
 .detailBox .article-content{
     font-size: 15px;
@@ -202,6 +200,7 @@ import editArticle from '../components/editorArticle'
     float:none;
     background-image: none;
     text-indent: inherit;
+
 }
 /*点赞 收藏*/
 .dlikeColBox{
